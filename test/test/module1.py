@@ -40,7 +40,7 @@ for index in (0, 10):
     distance = round(pulse_duration * 17150, 2)
     print "Distance1:",distance,"cm"
 
-    time.sleep(0.3);
+    time.sleep(1);
 
     GPIO.output(TRIG2, True)
     time.sleep(0.00001)
@@ -55,7 +55,7 @@ for index in (0, 10):
     distance = round(pulse_duration * 17150, 2)
     print "Distance2:",distance,"cm"
 
-    time.sleep(0.3);
+    time.sleep(1);
 
     GPIO.output(TRIG3, True)
     time.sleep(0.00001)
@@ -70,6 +70,6 @@ for index in (0, 10):
     distance = round(pulse_duration * 17150, 2)
     print "Distance3:",distance,"cm"
 
-    time.sleep(0.3)
+    time.sleep(1)
 
 GPIO.cleanup()
