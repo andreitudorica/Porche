@@ -2,8 +2,6 @@ import RPi.GPIO as GPIO
 import time
 GPIO.setmode(GPIO.BCM)
 
-GPIO.cleanup()
-
 TRIG1 = 4
 ECHO1 = 17
 
@@ -71,3 +69,5 @@ for index in (0, 10):
 
     distance = round(pulse_duration * 17150, 2)
     print "Distance3:",distance,"cm"
+
+GPIO.cleanup()
