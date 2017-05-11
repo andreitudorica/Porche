@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 
+import Main
 from Main import *
 
 GPIO.setmode(GPIO.BCM)
@@ -19,7 +20,6 @@ echo = [17,22,9]
 trig = [4,27,10]
 
 sensor_readings = []
-print "Waiting For Sensors To Settle"
 time.sleep(2)
 def setup_ultrasonics():
     for index in xrange(0, nr_ultrasonic_sensors):
@@ -57,13 +57,25 @@ def refresh_sensors():#function running in sepparate thread for cuntinuosly read
         event.wait()
         read_ultrasonics()
 
-    print"Ready reading"
+    print "Ready reading"
     return 0.2
 
 GPIO.setwarnings(False)
-setup_ultrasonics()
-print "ready setup"
-event = _threading.Event()
 
+def printUltrasonics():
+    event.clear()
+    for index in xrange(0, nr_ultrasonic_sensors):
+        print sensor_readings[index]
+    print"\n"
+    #if mappingDone()==False & WheelEncoder==1:
+    #    mapStep()
+    time.sleep(0.5)
+    event.set()
 
-print "Ready"
+def RunUltrasonics():
+    print "Ultrasonic sensors starting..."
+    setup_ultrasonics()
+    print "Setup ready."
+    refresh_thread = Thread(target=refresh_sensors)#define separate thread for ultrasonic sensors read
+    refresh_thread.start()
+    event = _threading.Event()
