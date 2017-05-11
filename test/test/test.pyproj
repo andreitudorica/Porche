@@ -22,10 +22,20 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Main.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="module1.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UltrasonicSensors.py" />
     <Compile Include="test.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ReadMe.txt" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

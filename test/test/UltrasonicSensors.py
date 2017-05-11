@@ -1,5 +1,4 @@
 import RPi.GPIO as GPIO
-from threading import Thread
 import time
 
 from Main import *
@@ -8,9 +7,7 @@ GPIO.setmode(GPIO.BCM)
 import sys as _sys
 try:
     import threading as _threading
-except ImportError:
-    import dummy_threading as _threading
-
+    from threading import Thread
 except ImportError:
     del _sys.modules[__name__]
     raise
