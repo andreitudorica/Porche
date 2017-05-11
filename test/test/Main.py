@@ -1,16 +1,17 @@
 import RPi.GPIO as GPIO
-from threading import Thread
 import time
 GPIO.setmode(GPIO.BCM)
 import sys as _sys
 try:
     import threading as _threading
+    from _threading import Thread
 except ImportError:
     import dummy_threading as _threading
 except ImportError:
     del _sys.modules[__name__]
     raise
-
+import UltrasonicSensors
+import Mapping
 from UltrasonicSensors import *
 from Mapping import *
 
