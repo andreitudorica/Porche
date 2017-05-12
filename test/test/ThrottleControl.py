@@ -12,7 +12,7 @@ ThrottlePin.start(ThrottleAmount)
 time.sleep(2)
 ThrottleAmount = 8
 ThrottlePin.ChangeDutyCycle(ThrottleAmount) #change Throttle
-time.sleep(2)
+time.sleep(10)
 ThrottleAmount = 7.5
 ThrottlePin.ChangeDutyCycle(ThrottleAmount) #change Throttle
 

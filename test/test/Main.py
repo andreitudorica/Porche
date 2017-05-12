@@ -22,7 +22,7 @@ from Mapping import *
 
 RunUltrasonics()
 
-while 1:
-    printUltrasonics()
-    if mappingDone()==False:
-        mapStep()
+#while 1:
+#    printUltrasonics()
+#    if mappingDone()==False:
+#        mapStep()
