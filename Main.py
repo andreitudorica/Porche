@@ -1,5 +1,9 @@
 import RPi.GPIO as GPIO
-GPIO.cleanup()
+
+def setup():
+	GPIO.setmode(GPIO.BCM)
+	GPIO.setwarnings(False)
+setup()
 import time
 GPIO.setmode(GPIO.BCM)
 import sys as _sys
@@ -19,8 +23,11 @@ from Mapping import *
 from PID_follower import correction
 
 time.sleep(2)
-def setup():
-	GPIO.setwarnings(False)
+# 13,19,26,21,20 front sensors
+#16 wheel spin
+# echo = [17,22,9]
+# trig = [4,27,10]
+#14,15,18 sensori laterali
 #RunUltrasonics()
 def DummyTest():
 	print "throttle 7.9"
@@ -35,11 +42,14 @@ def DummyTest():
 #	setTurning(-1)
 #	time.sleep(1)
 	setThrottle(7.5)
-setup()
+
 time.sleep(2);
 setTurning(0)
 setThrottle(7.9)
+setTurning(1)
+
 to=correction(5)
-print " is"+to
+print to
 setTurning(to)
 time.sleep(4)
+GPIO.cleanup()

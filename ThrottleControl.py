@@ -4,7 +4,7 @@ import time
 GPIO.setwarnings(False)
 
 
-ThrottlePin = 26
+ThrottlePin = 5
 ThrottleAmount = 7.5
 GPIO.setup(ThrottlePin, GPIO.OUT)
 ThrottlePin = GPIO.PWM(26,50)
