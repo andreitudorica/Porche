@@ -1,6 +1,10 @@
 import sys as _sys
-import Main
-from Main import *
+from DirectionControl import *
+from ThrottleControl import *
+import RPi.GPIO as GPIO
+
+# import Main
+# from Main import *
 
 
 WheelEncoder = 11

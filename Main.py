@@ -9,13 +9,13 @@ except ImportError:
     del _sys.modules[__name__]
     raise
 
-import UltrasonicSensors
-import Mapping
-import ThrottleControl
-import DirectionControl
+# import UltrasonicSensors
+# import Mapping
+# import ThrottleControl
+# import DirectionControl
 from DirectionControl import *
 from ThrottleControl import *
-from UltrasonicSensors import *
+# from UltrasonicSensors import *
 from Mapping import *
 
 
@@ -35,5 +35,6 @@ def DummyTest():
 #	setTurning(-1)
 #	time.sleep(1)
 	setThrottle(7.5)
-
+print "Before"
 DummyTest()
+print "After"
