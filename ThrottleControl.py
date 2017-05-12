@@ -10,6 +10,7 @@ ThrottlePin = GPIO.PWM(26,50)
 ThrottlePin.start(ThrottleAmount)
 
 def setThrottle(ta):
+    global ThrottleAmount
     ThrottleAmount = ta
     ThrottlePin.ChangeDutyCycle(ThrottleAmount) #change Throttle
 
