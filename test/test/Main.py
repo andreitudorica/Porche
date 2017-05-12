@@ -8,8 +8,13 @@ try:
 except ImportError:
     del _sys.modules[__name__]
     raise
+
 import UltrasonicSensors
 import Mapping
+import ThrottleControl
+import DirectionControl
+from DirectionControl import *
+from ThrottleControl import *
 from UltrasonicSensors import *
 from Mapping import *
 
@@ -19,7 +24,5 @@ RunUltrasonics()
 
 while 1:
     printUltrasonics()
-    
-
-
-GPIO.cleanup()
+    if mappingDone()==False:
+        mapStep()

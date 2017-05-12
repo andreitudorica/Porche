@@ -1,8 +1,10 @@
-
 import sys as _sys
-WheelEncoder = 1
-TurningAmount = 0
-Throttle = 0
+import Main
+from Main import *
+
+
+WheelEncoder = 11
+GPIO.setup(WheelEncoder, GPIO.IN)
 
 def mappingDone():
     return False;
