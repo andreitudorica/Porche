@@ -1,9 +1,6 @@
 import RPi.GPIO as GPIO
 import time
 
-import Main
-from Main import *
-
 GPIO.setmode(GPIO.BCM)
 import sys as _sys
 try:
@@ -14,7 +11,7 @@ except ImportError:
     raise
 
 
-
+event=_threading.BoundedSemaphore()
 nr_ultrasonic_sensors = 3
 echo = [17,22,9]
 trig = [4,27,10]
@@ -48,9 +45,6 @@ def read_ultrasonics():
         time.sleep(0.00001)
 
 
-semaphore = _threading.BoundedSemaphore()
-
-
 def refresh_sensors():#function running in sepparate thread for cuntinuosly reading the ultrasonic sensors
 
     while 1:
@@ -78,4 +72,3 @@ def RunUltrasonics():
     print "Setup ready."
     refresh_thread = Thread(target=refresh_sensors)#define separate thread for ultrasonic sensors read
     refresh_thread.start()
-    event = _threading.Event()
