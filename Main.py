@@ -35,7 +35,7 @@ def DummyTest():
 #	setTurning(-1)
 #	time.sleep(1)
 	setThrottle(7.5)
-
+setup()
 time.sleep(2);
 setTurning(0)
 setThrottle(7.9)

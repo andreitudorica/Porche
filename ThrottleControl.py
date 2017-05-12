@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 
 GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
+
 
 ThrottlePin = 26
 ThrottleAmount = 7.5

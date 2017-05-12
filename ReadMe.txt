@@ -3,3 +3,4 @@
 9 acceleratie
 
 6.11 -> 7.35 (dreapta)
+
