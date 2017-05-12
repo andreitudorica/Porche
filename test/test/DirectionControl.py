@@ -8,9 +8,6 @@ TurningPin = GPIO.PWM(6,50)
 TurningPin.start(TurningAmount)
 
 
-TurningAmount = 7.35
-TurningPin.ChangeDutyCycle(TurningAmount) #change Throttle
-time.sleep(1)
-TurningAmount = 8.59
-TurningPin.ChangeDutyCycle(TurningAmount) #change Throttle
-time.sleep(11)
+def setTurning(ta):
+    TurningAmount = 7.35 + ta*1.24
+    TurningPin.ChangeDutyCycle(TurningAmount) #change Throttle

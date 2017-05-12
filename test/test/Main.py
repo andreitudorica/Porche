@@ -19,10 +19,12 @@ from UltrasonicSensors import *
 from Mapping import *
 
 
+time.sleep(2)
 
 RunUltrasonics()
-
-#while 1:
-#    printUltrasonics()
-#    if mappingDone()==False:
-#        mapStep()
+setThrottle(8)
+setTurning(0)
+time.sleep(1)
+setTurning(-1)
+time.sleep(3)
+setThrottle(7.5)
