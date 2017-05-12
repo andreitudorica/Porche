@@ -34,10 +34,11 @@ def DummyTest():
 #	setTurning(-1)
 #	time.sleep(1)
 	setThrottle(7.5)
-
+GPIO.cleanup()
+time.sleep(2);
 setTurning(0)
 setThrottle(7.9)
 to=correction(5)
-print to
+print " is"+to
 setTurning(to)
 time.sleep(4)

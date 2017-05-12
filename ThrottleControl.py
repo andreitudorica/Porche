@@ -1,11 +1,12 @@
 import RPi.GPIO as GPIO
 import time
-GPIO.cleanup()
+
+GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
 ThrottlePin = 26
 ThrottleAmount = 7.5
-GPIO.setup(ThrottlePin, GPIO.OUT)
+GPIO.setup(ThrottlePin, GPIO.OU)
 ThrottlePin = GPIO.PWM(26,50)
 ThrottlePin.start(ThrottleAmount)
 
