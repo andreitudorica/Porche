@@ -17,7 +17,7 @@ echo = [17,22,9]
 trig = [4,27,10]
 
 sensor_readings = []
-time.sleep(2)
+
 def setup_ultrasonics():
     for index in xrange(0, nr_ultrasonic_sensors):
         sensor_readings.append(0)
@@ -44,7 +44,7 @@ def read_ultrasonics():
             sensor_readings[index] = distance
         time.sleep(0.00001)
 
-
+time.sleep(2)
 def refresh_sensors():#function running in sepparate thread for cuntinuosly reading the ultrasonic sensors
 
     while 1:
@@ -54,7 +54,7 @@ def refresh_sensors():#function running in sepparate thread for cuntinuosly read
     print "Ready reading"
     return 0.2
 
-GPIO.setwarnings(False)
+
 
 def printUltrasonics():
     event.clear()
