@@ -9,5 +9,5 @@ TurningPin.start(TurningAmount)
 
 
 def setTurning(ta):
-    TurningAmount = 7.35 + ta*1.24
+    TurningAmount = 7.35 + -1*ta*1.24
     TurningPin.ChangeDutyCycle(TurningAmount) #change Throttle

@@ -21,10 +21,19 @@ from Mapping import *
 
 time.sleep(2)
 
-RunUltrasonics()
-setThrottle(8)
-setTurning(0)
-time.sleep(1)
-setTurning(-1)
-time.sleep(3)
-setThrottle(7.5)
+#RunUltrasonics()
+def DummyTest():
+	print "throttle 8"
+	setThrottle(8)
+	print "going straight for 5 seconds"
+	setTurning(0)
+	time.sleep(5)
+	print "turning 1 for 3 seconds"
+	setTurning(1)
+	time.sleep(3)
+	print "turning -1 for 3 seconds"
+	setTurning(-1)
+	time.sleep(3)
+	setThrottle(7.5)
+
+DummyTest()
