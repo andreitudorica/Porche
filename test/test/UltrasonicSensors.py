@@ -11,7 +11,7 @@ except ImportError:
     raise
 
 
-event=_threading.BoundedSemaphore()
+event=_threading.Event()
 nr_ultrasonic_sensors = 3
 echo = [17,22,9]
 trig = [4,27,10]
