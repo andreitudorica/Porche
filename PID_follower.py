@@ -19,14 +19,14 @@ def  current_position(coded_position): #get the current position
          7:7,
          8:8,
          9:9,
-         1.5:10,
-         2.5:11,
-         3.5:12,
-         4.5:13,
-         5.5:14,
-         6.5:15,
-         7.5:16,
-         8.5:17,
+         10:1.5,
+         11:2.5,
+         12:3.5,
+         13:4.5,
+         14:5.5,
+         15:6.5,
+         16:7.5,
+         17:8.5,
         }
     return pos[coded_position]
 def set_last_error(error):
@@ -36,7 +36,7 @@ def set_last_error(error):
 def correction(raw_position):
     position=current_position(raw_position)
     error=calculate_error(position)
-    motor_direction=Kp*calculate_error(position)+Kd*(error-lerror)
+    motor_direction=Kp*error+Kd*(error-lerror)
     max_direction=Kp*4+4*Kd #compute the max rotation to normalize
     set_last_error(error)
     return motor_direction/max_direction
