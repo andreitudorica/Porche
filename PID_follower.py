@@ -40,8 +40,8 @@ def correction(raw_position):
     error=calculate_error(position)
     motor_direction=Kp*error+Kd*(error-lerror)
     max_direction=Kp*4+4*Kd #compute the max rotation to normalize
-    # print motor_direction
-    # print max_direction
+    print motor_direction
+    print max_direction
     direction = motor_direction / max_direction
     set_last_error(error)
 
@@ -51,7 +51,7 @@ def correction(raw_position):
 
 
 
-
+print correction(2)
 
 
 
