@@ -14,9 +14,8 @@ except ImportError:
     del _sys.modules[__name__]
     raise
 
-
-import DirectionControl
 from DirectionControl import *
+from ArduinoInput import *
 from ThrottleControl import *
 from UltrasonicSensors import *
 from Mapping import *
@@ -44,12 +43,12 @@ def DummyTest():
 	setThrottle(7.5)
 
 time.sleep(2);
-setTurning(0)
-setThrottle(7.9)
-setTurning(1)
-
-to=correction(5)
-print to
-setTurning(to)
-time.sleep(4)
+#setTurning(0)
+#setThrottle(7.9)
+#setTurning(1)
+getTriggeredSensor()
+#to=correction(5)
+#print to
+#setTurning(to)
+#time.sleep(4)
 GPIO.cleanup()
