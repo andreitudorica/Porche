@@ -13,5 +13,5 @@ def getTriggeredSensor():
         TriggeredFrontSensor+=a*pow(2,i)
 	 
     	
-    print " "
+
     return TriggeredFrontSensor

@@ -47,8 +47,8 @@ time.sleep(2);
 #setThrottle(7.9)
 #setTurning(1)
 while 1:
-	print getTriggeredSensor()
-#to=correction(5)
+	print correction(getTriggeredSensor())
+to=correction(5)
 #print to
 #setTurning(to)
 #time.sleep(4)

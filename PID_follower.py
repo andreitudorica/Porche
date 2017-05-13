@@ -1,9 +1,10 @@
+from __future__ import division
 last_position = 0
 center_sensor=5
 nr_sensors=9
 Kp=10
 Ki=5
-Kd=5
+Kd=1.2
 lerror = 0 #last error
 def calculate_error(position):
 
@@ -32,14 +33,21 @@ def  current_position(coded_position): #get the current position
 def set_last_error(error):
     global lerror
     lerror = error
-    print Kp
+
 def correction(raw_position):
+    print lerror
     position=current_position(raw_position)
     error=calculate_error(position)
     motor_direction=Kp*error+Kd*(error-lerror)
     max_direction=Kp*4+4*Kd #compute the max rotation to normalize
+    # print motor_direction
+    # print max_direction
+    direction = motor_direction / max_direction
     set_last_error(error)
-    return motor_direction/max_direction
+
+
+
+    return direction
 
 
 
