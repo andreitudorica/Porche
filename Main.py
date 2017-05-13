@@ -25,6 +25,7 @@ def setup():
 
 setup()
 time.sleep(4)
+setThrottle(7.95);
 while 1: 
     sensorBuffer=getTriggeredSensor()
     if sensorBuffer!=0:
