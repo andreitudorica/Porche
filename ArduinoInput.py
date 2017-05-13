@@ -7,11 +7,5 @@ def getTriggeredSensor():
     TriggeredFrontSensor=0
     for i in xrange(0,5):
 	a=GPIO.input(FrontSensor[i])
-	
-
-	
         TriggeredFrontSensor+=a*pow(2,i)
-	 
-    	
-
     return TriggeredFrontSensor
