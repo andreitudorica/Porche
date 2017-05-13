@@ -2,9 +2,9 @@ from __future__ import division
 last_position = 0
 center_sensor=5
 nr_sensors=9
-Kp=10
-Ki=5
-Kd=4#changed from 2
+Kp=15
+Ki=1
+Kd=1#changed from 2
 lerror = 0 #last error
 def calculate_error(position):
 

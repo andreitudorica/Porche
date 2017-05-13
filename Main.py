@@ -25,11 +25,17 @@ def setup():
 
 setup()
 time.sleep(4)
-setThrottle(7.95);
-while 1: 
-    sensorBuffer=getTriggeredSensor()
-    if sensorBuffer!=0:
-        sensor=sensorBuffer
-    setTurning(correction(sensor))
+setThrottle(7.9)
+t=time.time()
+lp=0
+while time.time()<t+5: 
+	sensorBuffer=getTriggeredSensor()
+	if sensorBuffer!=0:
+                sensor=sensorBuffer
+	ComputedCorrection=correction(sensor)
+	if lp!=sensorBuffer:
+		print sensorBuffer," Computed correction: ",ComputedCorrection
+		lp=sensorBuffer
+	setTurning(ComputedCorrection)
 
 GPIO.cleanup()
