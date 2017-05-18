@@ -1,0 +1,72 @@
+import RPi.GPIO as GPIO
+import time
+GPIO.setmode(GPIO.BCM)
+import sys as _sys
+try:
+    import threading as _threading
+    from threading import Thread
+except ImportError:
+    del _sys.modules[__name__]
+    raise
+import PID_follower 
+from DirectionControl import *
+from ArduinoInput import *
+from ThrottleControl import *
+from UltrasonicSensors import *
+from Mapping import *
+from PID_follower import correction
+
+sensor = 0
+delta = 0
+speedSet = 0
+def setup():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+    setTurning(0)
+
+setup()
+time.sleep(4)
+setThrottle(8.5)
+time.sleep(0.1)
+setThrottle(8+speedSet)
+t=time.time()
+LastMPG=time.time()
+lp=0
+lthrot=0
+
+#while time.time()<t+100: 
+#	if EncoderMPG()==1:
+ #      		CurrMPG=time.time()
+#		print "MPG: ",CurrMPG-LastMPG, "SpeedSet: ",speedSet
+ #     			if CurrMPG-LastMPG<0.006:
+  #        			speedSet-=0.01
+   #    		else:
+#			if CurrMPG-LastMPG>0.2:
+#				speedSet=0.1
+#			else:
+#				if  speedSet<0.07:
+ #          					speedSet+=0.005
+#				else:
+#					speedSet=0.07
+#		print "MPG: ",CurrMPG-LastMPG, "SpeedSet: ",speedSet
+#		LastMPG=time.time()
+ #      	sensorBuffer=getTriggeredSensor()
+#	if sensorBuffer!=0:
+ #      		sensor=sensorBuffer
+#	ComputedCorrection=correction(sensor)
+#	if lp!=sensorBuffer:
+#		#print sensorBuffer," Computed correction: ",ComputedCorrection
+#		lp=sensorBuffer
+#	setTurning(ComputedCorrection)
+#	throt=7.9+speedSet
+#	if throt != lthrot:
+#		setThrottle(throt)
+#		print "Throotle ",throt
+#		lthrot=throt
+
+setThrottle(7.9)
+time.sleep(3)
+
+print "Stop"
+
+GPIO.cleanup()

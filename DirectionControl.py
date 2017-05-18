@@ -13,5 +13,9 @@ TurningPin.start(TurningAmount)
 
 def setTurning(ta):
     global TurningAmount
+    if (ta > 0.3) | (ta < -0.3):
+	    delta = -0.5
+    else:
+	    delta = 0
     TurningAmount = NullTurning - ta*TurningDelta
     TurningPin.ChangeDutyCycle(TurningAmount) #change Throttle

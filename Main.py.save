@@ -1,4 +1,5 @@
-import RPi.GPIO as GPIO
+\import RPi.GPIO as GPIO
+
 import time
 GPIO.setmode(GPIO.BCM)
 import sys as _sys
@@ -19,8 +20,6 @@ from PID_follower import correction
 sensor = 0
 delta = 0
 speedSet = 0
-stepCounter = 0
-Sum = 0
 def setup():
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
@@ -28,37 +27,27 @@ def setup():
 
 setup()
 time.sleep(4)
-setThrottle(8.2)
-time.sleep(0.1)
+setThrottle(7.9+delta+speedSet)
 t=time.time()
 LastMPG=time.time()
+CurrMPG=time.time()
 lp=0
 lthrot=0
 while time.time()<t+100: 
-	time.sleep(0.0001)
-	if (EncoderMPG()==1) | (time.time()-LastMPG>0.2):
+	if EncoderMPG()==1:
         	CurrMPG=time.time()
-		stepCounter += 1
-		Sum=Sum+CurrMPG-LastMPG
-		if stepCounter==1:
-      			if Sum/10<0.015:
-			#if CurrMPG-LastMPG<0.0096:
-           			speedSet-=0.02
-				if speedSet<-0.1:
-					speedSet=-0.1
-        		else:
-				if Sum/10>0.2:
-				#if CurrMPG-LastMPG>0.2:
-					speedSet=0.1
-				else:
-					if  speedSet<0.2:
-            					speedSet+=0.01
-					else:
-						speedSet=0.2
-			print "MPG: ",Sum/10, "SpeedSet: ",speedSet
-			stepCounter=0
-			Sum=0
-		LastMPG=CurrMPG
+		print "MPG: ",CurrMPG-LastMPG, "SpeedSet: ",speedSet
+       		if CurrMPG-LastMPG>0.03:
+			if speedSet<0.05:
+           			speedSet+=0.005
+			else:
+				speedSet=0.05
+        	else:
+			if speedSet > -0.1:
+            			speedSet-=0.01
+			else:
+				speedSet=-0.1
+		LastMPG=time.time()
         sensorBuffer=getTriggeredSensor()
 	if sensorBuffer!=0:
         	sensor=sensorBuffer
@@ -67,11 +56,11 @@ while time.time()<t+100:
 		#print sensorBuffer," Computed correction: ",ComputedCorrection
 		lp=sensorBuffer
 	setTurning(ComputedCorrection)
-	throt=7.9+speedSet
+	throt=7.9+delta+speedSet
 	if throt != lthrot:
-		setThrottle(throt)
 		print "Throotle ",throt
 		lthrot=throt
+setThrottle(7.5)
 print "Stop"
 
 GPIO.cleanup()

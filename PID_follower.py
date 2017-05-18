@@ -1,15 +1,17 @@
 from __future__ import division
+import time as time
 last_position = 0
 center_sensor=5
 nr_sensors=9
-Kp=3
+Kp=5
 Ki=1
-Kd=0#changed from 2
-lerror = 0 #last error
-prevtime = 0 
+Kd=50#changed from 2
+lerror=0 #last error
+prevtime=time.time() 
 def calculate_error(position):
-
     return position -center_sensor
+def setCenterSensor(sensor):
+	center_sensor=sensor
 def  current_position(coded_position): #get the current position
     pos={0:center_sensor,
          1:1,
@@ -36,15 +38,18 @@ def set_last_error(error):
 
 def correction(raw_position):
 
-    currtime = time.time()
-    dt = currtime - prevtime
+    currtime=time.time()
+    global prevtime
+    dt=currtime-prevtime
     position=current_position(raw_position)
     error=calculate_error(position)
     if dt > 0:
-        motor_direction=Kp*error+Kd*(error-lerror) / dt
+        motor_direction=Kp*error+Kd*(error-lerror) / dt 
+    	#print "Motor Direction: ", dt
     else:
-        motor_direction=Kp*error+Kd*(error-lerror)
-    max_direction=Kp*4+4*Kd #compute the max rotation to normalize
+    	motor_direction=Kp*error+Kd*(error-lerror)
+    delta=5-abs(5-center_sensor)-1;
+    max_direction=Kp*delta+delta*Kd/dt #compute the max rotation to normalize
     direction = motor_direction / max_direction
     set_last_error(error)
     prevtime = currtime

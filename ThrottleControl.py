@@ -13,5 +13,5 @@ ThrottlePin.start(ThrottleAmount)
 def setThrottle(ta):
     global ThrottleAmount
     ThrottleAmount = ta
-    ThrottlePin.ChangeDutyCycle(ThrottleAmount) #change Throttle
+    ThrottlePin.ChangeDutyCycle(ta) #change Throttle
 
