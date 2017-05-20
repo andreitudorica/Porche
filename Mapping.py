@@ -15,13 +15,13 @@ def readMapping():
     f.close()
 
 def mappingNeeded():
-    file=Path('mapping.txt')    
-    return file.is_file();
+    return os.path.isfile('mapping.txt')
 
 def mappingDone():
-    f=open('mapping.txt','w')
-    s=str(mapping[0,mapping.count])
-    f.write(s)
+    f=open('mapping.txt','a+')
+    for i in mapping:
+	print mapping[i]
+    	f.write("%d " %mapping[i])
     f.close()
 
 def mapStep():

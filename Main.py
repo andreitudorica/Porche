@@ -21,11 +21,25 @@ delta = 0
 speedSet = 0
 stepCounter = 0
 Sum = 0
+mappingOn=False
 engage=False
+fd=0
+def finishDetected():
+	global fd
+	if fd==1:	
+		fd=0
+		return True
+	return False
+
 def setup():
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
     setTurning(0)
+    print "mapping needed", mappingNeeded()
+    if mappingNeeded()==False:
+	mappingOn=True
+    else:
+	readMapping()
 
 setup()
 time.sleep(4)
@@ -35,7 +49,7 @@ LastMPG=time.time()
 lp=0
 lthrot=0
 basicThrottle = 25       #the basic level of throttle
-simulationLength = 100     #number of seconds the code runs
+simulationLength = 10     #number of seconds the code runs
 numberOfStepsToAverage = 1 #the number of steps that are recorded to compute the change in throttle
 minimalDiff = 0.005        #the minimal trusted difference between 2 encoder steps 
 DesiredGap = 0.05          #the desired gap between 2 steps
@@ -44,28 +58,36 @@ SpeedSetDecrease = 1
 SpeedSetMin=-20
 SpeedSetMax=20
 setCenterSensor(5)
-while time.time()<t+100:
-    	if time.time()>t+4 and engage==False:
-		print "Started depasire///////////////// "
-       	 	secondTimer=time.time()
-       	 	while time.time()<secondTimer+0.65:
-			sensorBuffer=getTriggeredSensor()
-			if sensorBuffer!=0:
-				sensor=sensorBuffer
-            		setTurning(1)
-            		setThrottle(basicThrottle+5)
-        	secondTimer=time.time()
-		print "Back on track////////////"
-		print "Sensor is now////////// ",sensor
-        	#while time.time()<secondTimer+1:
-            	#	setTurning(-1)
-            	#	setThrottle(basicThrottle)
-		engage=True
-		sensor=2
-		setThrottle(basicThrottle)
-		print "last sensor///////// ",sensor
-		print "Finished depasire//////////"
+RunUltrasonics()
+while time.time()<t+simulationLength:
+#    	if time.time()>t+4 and engage==False:
+#		global fd
+ # 		fd=1
+#		print "Started depasire///////////////// "
+ #     	 	secondTimer=time.time()
+#      	 	while time.time()<secondTimer+0.65:
+#			sensorBuffer=getTriggeredSensor()
+#			if sensorBuffer!=0:
+#				sensor=sensorBuffer
+ #           		setTurning(1)
+  #          		setThrottle(basicThrottle+5)
+   #     	secondTimer=time.time()
+#		print "Back on track////////////"
+#		print "Sensor is now////////// ",sensor
+ #       	#while time.time()<secondTimer+1:
+  #          	#	setTurning(-1)
+   #         	#	setThrottle(basicThrottle)
+#		engage=True
+#		sensor=2
+#		setThrottle(basicThrottle)
+#		print "last sensor///////// ",sensor
+#		print "Finished depasire//////////"
+	if finishDetected()==True:
+		mappingOn=False
+		mappingDone()
 	if (EncoderMPG() == 1) & (time.time() - LastMPG>minimalDiff):
+		if mappingOn==True:
+			mapStep()
         	CurrMPG = time.time()
 		stepCounter += 1
 		Sum = Sum + CurrMPG - LastMPG

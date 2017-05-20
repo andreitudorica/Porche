@@ -42,6 +42,7 @@ def read_ultrasonics():
         if(distance < 300):
             sensor_readings[index] = distance
         time.sleep(0.00001)
+    printUltrasonics()
 
 time.sleep(2)
 def refresh_sensors():#function running in sepparate thread for cuntinuosly reading the ultrasonic sensors
