@@ -14,9 +14,9 @@ from ArduinoInput import *
 from ThrottleControl import *
 from UltrasonicSensors import *
 from Mapping import *
-from PID_follower import correction
+from PID_follower import *
 
-sensor = 0
+sensor = 5
 delta = 0
 speedSet = 0
 stepCounter = 0
@@ -28,49 +28,49 @@ def setup():
 
 setup()
 time.sleep(4)
-setThrottle(8.2)
 time.sleep(0.1)
 t=time.time()
 LastMPG=time.time()
 lp=0
 lthrot=0
-while time.time()<t+100: 
-	time.sleep(0.0001)
-	if (EncoderMPG()==1) | (time.time()-LastMPG>0.2):
-        	CurrMPG=time.time()
+basicThrottle = 20       #the basic level of throttle
+simulationLength = 100     #number of seconds the code runs
+numberOfStepsToAverage = 1 #the number of steps that are recorded to compute the change in throttle
+minimalDiff = 0.005        #the minimal trusted difference between 2 encoder steps 
+DesiredGap = 0.05          #the desired gap between 2 steps
+SpeedSetIncrease = 1 
+SpeedSetDecrease = 1
+SpeedSetMin=-20
+SpeedSetMax=20
+setCenterSensor(5)
+while time.time()<t+100:
+	if (EncoderMPG() == 1) & (time.time() - LastMPG>minimalDiff):
+        	CurrMPG = time.time()
 		stepCounter += 1
-		Sum=Sum+CurrMPG-LastMPG
-		if stepCounter==1:
-      			if Sum/10<0.015:
-			#if CurrMPG-LastMPG<0.0096:
-           			speedSet-=0.02
-				if speedSet<-0.1:
-					speedSet=-0.1
-        		else:
-				if Sum/10>0.2:
-				#if CurrMPG-LastMPG>0.2:
-					speedSet=0.1
-				else:
-					if  speedSet<0.2:
-            					speedSet+=0.01
-					else:
-						speedSet=0.2
-			print "MPG: ",Sum/10, "SpeedSet: ",speedSet
-			stepCounter=0
-			Sum=0
+		Sum = Sum + CurrMPG - LastMPG
+		if (stepCounter == numberOfStepsToAverage):
+			Gap = Sum / numberOfStepsToAverage #compute average gap
+      			if Gap < DesiredGap: #if the gap is too small
+           			speedSet -= SpeedSetDecrease # slow down
+				if speedSet < SpeedSetMin:
+					speedSet = SpeedSetMin
+        		else: #if the gap is too big
+				speedSet += SpeedSetIncrease #speed up
+				if speedSet > SpeedSetMax:						
+					speedSet = SpeedSetMax
+			print "MPG: " , Gap , "SpeedSet: " , speedSet
+			stepCounter = 0 #reset counter
+			Sum = 0 #reset sum
 		LastMPG=CurrMPG
-        sensorBuffer=getTriggeredSensor()
-	if sensorBuffer!=0:
-        	sensor=sensorBuffer
-	ComputedCorrection=correction(sensor)
-	if lp!=sensorBuffer:
-		#print sensorBuffer," Computed correction: ",ComputedCorrection
-		lp=sensorBuffer
-	setTurning(ComputedCorrection)
-	throt=7.9+speedSet
+        sensorBuffer=getTriggeredSensor() # get the triggered front sensor in a buffer
+	if (sensorBuffer!=0) & (abs(sensor-sensorBuffer)<3): #if it is not 0
+        	sensor=sensorBuffer#we set the change the sensor we decide the turning on
+	ComputedCorrection=correction(sensor) # compute the correction 
+	setTurning(ComputedCorrection) # set turning acording to the front sensors
+	throt= basicThrottle + speedSet #compute the new throttle
 	if throt != lthrot:
 		setThrottle(throt)
-		print "Throotle ",throt
+		print "Throtle ",throt
 		lthrot=throt
 print "Stop"
 

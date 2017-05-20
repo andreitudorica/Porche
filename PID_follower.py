@@ -11,6 +11,15 @@ prevtime=time.time()
 def calculate_error(position):
     return position -center_sensor
 def setCenterSensor(sensor):
+	global center_sensor
+	if sensor==5:
+		Kp=5
+		Ki=1
+		Kd=50
+	else:
+		Kp=7
+		Ki=1
+		Kd=25	
 	center_sensor=sensor
 def  current_position(coded_position): #get the current position
     pos={0:center_sensor,
@@ -40,8 +49,11 @@ def correction(raw_position):
 
     currtime=time.time()
     global prevtime
+    global last_position
     dt=currtime-prevtime
     position=current_position(raw_position)
+    if position != last_position:
+        print "position: ", position
     error=calculate_error(position)
     if dt > 0:
         motor_direction=Kp*error+Kd*(error-lerror) / dt 
@@ -53,7 +65,7 @@ def correction(raw_position):
     direction = motor_direction / max_direction
     set_last_error(error)
     prevtime = currtime
-
+    last_position=position
     return direction
 
 

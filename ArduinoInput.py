@@ -1,6 +1,7 @@
 import math
 import RPi.GPIO as GPIO
 FrontSensor= [20,21,26,19,13]
+LateralSensor= [14,15,18]
 EncoderPin=16
 for index in xrange(4,-1,-1):
     GPIO.setup(FrontSensor[index], GPIO.IN)
@@ -13,6 +14,13 @@ def getTriggeredSensor():
     return TriggeredFrontSensor
 
 elast = 0
+def getLateralSensors():
+	sensorLat=0
+	for i in xrange(0,4):
+		b=GPIO.input(LateralSensor[i])
+	sensorLat+=b*pow(2,i)
+	return sensorLat
+
 def EncoderMPG():
     global elast
     e=GPIO.input(EncoderPin)
