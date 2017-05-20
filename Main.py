@@ -34,7 +34,7 @@ t=time.time()
 LastMPG=time.time()
 lp=0
 lthrot=0
-basicThrottle = 20       #the basic level of throttle
+basicThrottle = 25       #the basic level of throttle
 simulationLength = 100     #number of seconds the code runs
 numberOfStepsToAverage = 1 #the number of steps that are recorded to compute the change in throttle
 minimalDiff = 0.005        #the minimal trusted difference between 2 encoder steps 
@@ -45,16 +45,26 @@ SpeedSetMin=-20
 SpeedSetMax=20
 setCenterSensor(5)
 while time.time()<t+100:
-    if time.time()>5 & engage==False:
-        secondTimer=time.time()
-        while time.time()<secondTimer+2
-            setTurning(-1)
-            setThrottle(basicThrottle)
-        secondTimer=time.time()
-        while time.time()<secondTimer+2
-            setTurning(1)
-            setThrottle(basicThrottle)
-        engage=True
+    	if time.time()>t+4 and engage==False:
+		print "Started depasire///////////////// "
+       	 	secondTimer=time.time()
+       	 	while time.time()<secondTimer+0.65:
+			sensorBuffer=getTriggeredSensor()
+			if sensorBuffer!=0:
+				sensor=sensorBuffer
+            		setTurning(1)
+            		setThrottle(basicThrottle+5)
+        	secondTimer=time.time()
+		print "Back on track////////////"
+		print "Sensor is now////////// ",sensor
+        	#while time.time()<secondTimer+1:
+            	#	setTurning(-1)
+            	#	setThrottle(basicThrottle)
+		engage=True
+		sensor=2
+		setThrottle(basicThrottle)
+		print "last sensor///////// ",sensor
+		print "Finished depasire//////////"
 	if (EncoderMPG() == 1) & (time.time() - LastMPG>minimalDiff):
         	CurrMPG = time.time()
 		stepCounter += 1
@@ -76,6 +86,7 @@ while time.time()<t+100:
         sensorBuffer=getTriggeredSensor() # get the triggered front sensor in a buffer
 	if (sensorBuffer!=0) & (abs(sensor-sensorBuffer)<3): #if it is not 0
         	sensor=sensorBuffer#we set the change the sensor we decide the turning on
+	#print "Position of last sensor",sensor
 	ComputedCorrection=correction(sensor) # compute the correction 
 	setTurning(ComputedCorrection) # set turning acording to the front sensors
 	throt= basicThrottle + speedSet #compute the new throttle
