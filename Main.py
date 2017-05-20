@@ -21,6 +21,7 @@ delta = 0
 speedSet = 0
 stepCounter = 0
 Sum = 0
+engage=False
 def setup():
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
@@ -44,6 +45,16 @@ SpeedSetMin=-20
 SpeedSetMax=20
 setCenterSensor(5)
 while time.time()<t+100:
+    if time.time()>5 & engage==False:
+        secondTimer=time.time()
+        while time.time()<secondTimer+2
+            setTurning(-1)
+            setThrottle(basicThrottle)
+        secondTimer=time.time()
+        while time.time()<secondTimer+2
+            setTurning(1)
+            setThrottle(basicThrottle)
+        engage=True
 	if (EncoderMPG() == 1) & (time.time() - LastMPG>minimalDiff):
         	CurrMPG = time.time()
 		stepCounter += 1
