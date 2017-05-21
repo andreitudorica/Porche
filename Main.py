@@ -15,7 +15,6 @@ from ThrottleControl import *
 from UltrasonicSensors import *
 from Mapping import *
 from PID_follower import *
-from ObstacleAvoidance import *
 
 sensor = 5
 delta = 0
@@ -24,7 +23,7 @@ stepCounter = 0
 Sum = 0
 mappingOn=False
 engage=False
-fd=0
+
 def finishDetected():
 	global fd
 	if fd==1:	
@@ -33,24 +32,22 @@ def finishDetected():
 	return False
 
 def setup():
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
-    setTurning(0)
-    print "mapping needed", mappingNeeded()
-    if mappingNeeded()==False:
-	mappingOn=True
-    else:
-	readMapping()
-
+    	GPIO.setmode(GPIO.BCM)
+    	GPIO.setwarnings(False)
+    	setTurning(0)
+    	print "mapping needed", mappingNeeded()
+    	if mappingNeeded()==False:
+		mappingOn=True
+    	else:
+		readMapping()
 setup()
 time.sleep(4)
-time.sleep(0.1)
 t=time.time()
 LastMPG=time.time()
 lp=0
 lthrot=0
-basicThrottle = 25       #the basic level of throttle
-simulationLength = 10     #number of seconds the code runs
+basicThrottle = 25         #the basic level of throttle
+simulationLength = 10      #number of seconds the code runs
 numberOfStepsToAverage = 1 #the number of steps that are recorded to compute the change in throttle
 minimalDiff = 0.005        #the minimal trusted difference between 2 encoder steps 
 DesiredGap = 0.05          #the desired gap between 2 steps
@@ -60,13 +57,16 @@ SpeedSetMin=-20
 SpeedSetMax=20
 setCenterSensor(5)
 RunUltrasonics()
+global fd
+global obstacleDetected
+fd=0
+obstacleDetected=False
 while time.time()<t+simulationLength:
-    if time.time()>t+4 and engage==False:
-		global fd
-  		fd=1
-        obstacleDetected=True
-        runObstacleAvoidance()
-    
+    	if time.time()>t+4 and engage==False:
+		from ObstacleAvoidance import runObstacleAvoidance
+		fd=1
+		obstacleDetected=True
+        	runObstacleAvoidance()
 	if finishDetected()==True:
 		mappingOn=False
 		mappingDone()
@@ -90,15 +90,15 @@ while time.time()<t+simulationLength:
 			stepCounter = 0 #reset counter
 			Sum = 0 #reset sum
 		LastMPG=CurrMPG
-    if obstacleDetected==False:
-        sensorBuffer=getTriggeredSensor() # get the triggered front sensor in a buffer
-	    if (sensorBuffer!=0) & (abs(sensor-sensorBuffer)<3): #if it is not 0
-        	    sensor=sensorBuffer#we set the change the sensor we decide the turning on
-	    #print "Position of last sensor",sensor
-	    ComputedCorrection=correction(sensor) # compute the correction 
-	    setTurning(ComputedCorrection) # set turning acording to the front sensors
-    if obstacleDetected==True:
-        speedSet=5
+	if obstacleDetected==False:
+		sensorBuffer=getTriggeredSensor() # get the triggered front sensor in a buffer
+	    	if (sensorBuffer!=0) & (abs(sensor-sensorBuffer)<3): #if it is not 0
+        	    	sensor=sensorBuffer#we set the change the sensor we decide the turning on
+	    		#print "Position of last sensor",sensor
+	    	ComputedCorrection=correction(sensor) # compute the correction 
+	    	setTurning(ComputedCorrection) # set turning acording to the front sensors
+    	if obstacleDetected==True:
+        	speedSet=5
 	throt= basicThrottle + speedSet #compute the new throttle
 	if throt != lthrot:
 		setThrottle(throt)
