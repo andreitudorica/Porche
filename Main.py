@@ -15,6 +15,7 @@ from ThrottleControl import *
 from UltrasonicSensors import *
 from Mapping import *
 from PID_follower import *
+from ObstacleAvoidance import *
 
 sensor = 5
 delta = 0
@@ -60,28 +61,12 @@ SpeedSetMax=20
 setCenterSensor(5)
 RunUltrasonics()
 while time.time()<t+simulationLength:
-#    	if time.time()>t+4 and engage==False:
-#		global fd
- # 		fd=1
-#		print "Started depasire///////////////// "
- #     	 	secondTimer=time.time()
-#      	 	while time.time()<secondTimer+0.65:
-#			sensorBuffer=getTriggeredSensor()
-#			if sensorBuffer!=0:
-#				sensor=sensorBuffer
- #           		setTurning(1)
-  #          		setThrottle(basicThrottle+5)
-   #     	secondTimer=time.time()
-#		print "Back on track////////////"
-#		print "Sensor is now////////// ",sensor
- #       	#while time.time()<secondTimer+1:
-  #          	#	setTurning(-1)
-   #         	#	setThrottle(basicThrottle)
-#		engage=True
-#		sensor=2
-#		setThrottle(basicThrottle)
-#		print "last sensor///////// ",sensor
-#		print "Finished depasire//////////"
+    if time.time()>t+4 and engage==False:
+		global fd
+  		fd=1
+        obstacleDetected=True
+        runObstacleAvoidance()
+    
 	if finishDetected()==True:
 		mappingOn=False
 		mappingDone()
@@ -105,12 +90,15 @@ while time.time()<t+simulationLength:
 			stepCounter = 0 #reset counter
 			Sum = 0 #reset sum
 		LastMPG=CurrMPG
+    if obstacleDetected==False:
         sensorBuffer=getTriggeredSensor() # get the triggered front sensor in a buffer
-	if (sensorBuffer!=0) & (abs(sensor-sensorBuffer)<3): #if it is not 0
-        	sensor=sensorBuffer#we set the change the sensor we decide the turning on
-	#print "Position of last sensor",sensor
-	ComputedCorrection=correction(sensor) # compute the correction 
-	setTurning(ComputedCorrection) # set turning acording to the front sensors
+	    if (sensorBuffer!=0) & (abs(sensor-sensorBuffer)<3): #if it is not 0
+        	    sensor=sensorBuffer#we set the change the sensor we decide the turning on
+	    #print "Position of last sensor",sensor
+	    ComputedCorrection=correction(sensor) # compute the correction 
+	    setTurning(ComputedCorrection) # set turning acording to the front sensors
+    if obstacleDetected==True:
+        speedSet=5
 	throt= basicThrottle + speedSet #compute the new throttle
 	if throt != lthrot:
 		setThrottle(throt)
