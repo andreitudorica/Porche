@@ -21,9 +21,11 @@ delta = 0
 speedSet = 0
 stepCounter = 0
 Sum = 0
+global mappingOn
 mappingOn=False
 engage=False
 
+setThrottle(0)
 def finishDetected():
 	global fd
 	if fd==1:	
@@ -32,6 +34,7 @@ def finishDetected():
 	return False
 
 def setup():
+	global mappingOn
     	GPIO.setmode(GPIO.BCM)
     	GPIO.setwarnings(False)
     	setTurning(0)
@@ -39,6 +42,7 @@ def setup():
     	if mappingNeeded()==False:
 		mappingOn=True
     	else:
+		mappingOn=False
 		readMapping()
 setup()
 time.sleep(4)
@@ -46,45 +50,50 @@ t=time.time()
 LastMPG=time.time()
 lp=0
 lthrot=0
-basicThrottle = 25         #the basic level of throttle
-simulationLength = 10      #number of seconds the code runs
+basicThrottle = 22          #the basic level of throttle
+simulationLength = 100      #number of seconds the code runs
 numberOfStepsToAverage = 1 #the number of steps that are recorded to compute the change in throttle
 minimalDiff = 0.005        #the minimal trusted difference between 2 encoder steps 
 DesiredGap = 0.05          #the desired gap between 2 steps
+
 engagingTime=0.65
-engageLeft=2
-engageRight=8
-SpeedSetIncrease = 1 
-SpeedSetDecrease = 1
+engageLeft=-1
+engageRight=1
+dischargeLeft=2
+dischargeRight=8
+
+SpeedSetIncrease = 0.3 
+SpeedSetDecrease = 0.3
 SpeedSetMin=-20
 SpeedSetMax=20
 setCenterSensor(5)
 RunUltrasonics()
 global fd
 global obstacleDetected
+global demoDone
+global lastTurningAmount
 fd=0
 obstacleDetected=False
+demoDone=False
+lastTurningAmount=0
 while time.time()<t+simulationLength:
-    	if time.time()>t+4 and engage==False:
-            
+	if time.time()>t+4 and demoDone==False:       #demo collision avoidance     
 	        print "Started depasire///////////////// "
-        	secondTimer=time.time()
-		    fd=1
-		    obstacleDetected=True
-            engage=True
-		    sensor=engageLeft
-        if engage==true
-            if time.time()<secondTimer+engagingTime:
-            	setTurning(1)
-            else
-                engage=False
-	if finishDetected()==True:
+        	engageStart=time.time()
+		obstacleDetected=True
+            	engage=True
+		sensor=dischargeLeft
+		decidedEngage=engageRight
+
+		demoDone=True
+
+	if finishDetected()==True and mappingOn==True:
 		mappingOn=False
 		mappingDone()
+	#print EncoderMPG()
 	if (EncoderMPG() == 1) & (time.time() - LastMPG>minimalDiff):
-		if mappingOn==True:
-			mapStep()
-        	CurrMPG = time.time()
+#		print 11111111
+		CurrMPG = time.time()
 		stepCounter += 1
 		Sum = Sum + CurrMPG - LastMPG
 		if (stepCounter == numberOfStepsToAverage):
@@ -101,15 +110,27 @@ while time.time()<t+simulationLength:
 			stepCounter = 0 #reset counter
 			Sum = 0 #reset sum
 		LastMPG=CurrMPG
-	if engage==False:
+		if mappingOn==True:
+                        print 'maaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaap'
+                        mapStep(lastTurningAmount)
+
+	if engage==False:#normal case
 		sensorBuffer=getTriggeredSensor() # get the triggered front sensor in a buffer
 	    	if (sensorBuffer!=0) & (abs(sensor-sensorBuffer)<3): #if it is not 0
         	    	sensor=sensorBuffer#we set the change the sensor we decide the turning on
 	    		#print "Position of last sensor",sensor
 	    	ComputedCorrection=correction(sensor) # compute the correction 
 	    	setTurning(ComputedCorrection) # set turning acording to the front sensors
-    	if obstacleDetected==True:
-        	speedSet=5
+		lastTurningAmount=ComputedCorrection
+	else :#in collision avoidance state
+		if(time.time()<engageStart+engagingTime):#if in engage state
+			setTurning(decidedEngage)# engage
+			lastTurningAmount=decidedEngage
+		else:
+			engage=False
+			fd=1	
+    	if engage==True:
+        	speedSet=-4
 	throt= basicThrottle + speedSet #compute the new throttle
 	if throt != lthrot:
 		setThrottle(throt)

@@ -3,9 +3,9 @@ import time as time
 last_position = 0
 center_sensor=5
 nr_sensors=9
-Kp=5
+Kp=300
 Ki=1
-Kd=50#changed from 2
+Kd=100#changed from 2
 lerror=0 #last error
 prevtime=time.time() 
 def calculate_error(position):
