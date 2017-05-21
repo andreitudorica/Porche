@@ -8,8 +8,8 @@ except ImportError:
     raise
 
 def fcnObstacleAvoidance():
-        import Main
-	print "Started depasire///////////////// "
+        from Main import engage,sensor
+	    print "Started depasire///////////////// "
       	secondTimer=time.time()
       	while time.time()<secondTimer+0.65:
             	setTurning(1)

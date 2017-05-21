@@ -9,9 +9,12 @@ mapping = []
 GPIO.setup(WheelEncoder, GPIO.IN)
 
 def readMapping():
-    f=open('mapping.txt','r')
-    mapping=map(int,f,f.readline().split())
-    f.close()
+    with open('mapping.txt') as f:
+        for line in f:
+            line = line.split() # to deal with blank 
+            if line:            # lines (ie skip them)
+                line = [int(i) for i in line]
+                mapping.append(line)
 
 def mappingNeeded():
     return os.path.isfile('mapping.txt')
