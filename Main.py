@@ -51,6 +51,9 @@ simulationLength = 10      #number of seconds the code runs
 numberOfStepsToAverage = 1 #the number of steps that are recorded to compute the change in throttle
 minimalDiff = 0.005        #the minimal trusted difference between 2 encoder steps 
 DesiredGap = 0.05          #the desired gap between 2 steps
+engagingTime=0.65
+engageLeft=2
+engageRight=8
 SpeedSetIncrease = 1 
 SpeedSetDecrease = 1
 SpeedSetMin=-20
@@ -63,10 +66,18 @@ fd=0
 obstacleDetected=False
 while time.time()<t+simulationLength:
     	if time.time()>t+4 and engage==False:
-		from ObstacleAvoidance import runObstacleAvoidance
-		fd=1
-		obstacleDetected=True
-        	runObstacleAvoidance()
+            
+	        print "Started depasire///////////////// "
+        	secondTimer=time.time()
+		    fd=1
+		    obstacleDetected=True
+            engage=True
+		    sensor=engageLeft
+        if engage==true
+            if time.time()<secondTimer+engagingTime:
+            	setTurning(1)
+            else
+                engage=False
 	if finishDetected()==True:
 		mappingOn=False
 		mappingDone()
@@ -90,7 +101,7 @@ while time.time()<t+simulationLength:
 			stepCounter = 0 #reset counter
 			Sum = 0 #reset sum
 		LastMPG=CurrMPG
-	if obstacleDetected==False:
+	if engage==False:
 		sensorBuffer=getTriggeredSensor() # get the triggered front sensor in a buffer
 	    	if (sensorBuffer!=0) & (abs(sensor-sensorBuffer)<3): #if it is not 0
         	    	sensor=sensorBuffer#we set the change the sensor we decide the turning on

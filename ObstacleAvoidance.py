@@ -9,14 +9,11 @@ except ImportError:
 
 def fcnObstacleAvoidance():
         from Main import engage,sensor
-	    print "Started depasire///////////////// "
-      	secondTimer=time.time()
       	while time.time()<secondTimer+0.65:
             	setTurning(1)
             	#setThrottle(basicThrottle+5)
 		print "Back on track////////////"
-		engage=True
-		sensor=2
+		
 		setThrottle(basicThrottle)
 		print "last sensor///////// ",sensor
 		print "Finished depasire//////////"
