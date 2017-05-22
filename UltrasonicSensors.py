@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 import time
-
+from multiprocessing import Process
 import sys as _sys
 try:
     import threading as _threading
@@ -24,9 +24,8 @@ def setup_ultrasonics():
         GPIO.setup(trig[index], GPIO.OUT)
         GPIO.output(trig[index], False)
 
-def read_ultrasonics():
-    for index in xrange(0, nr_ultrasonic_sensors):
-
+def read_ultrasonics(index):
+	print index	
         GPIO.output(trig[index], True)
         time.sleep(0.00001)
         GPIO.output(trig[index], False)
@@ -40,35 +39,29 @@ def read_ultrasonics():
         pulse_duration = pulse_end - pulse_start
         distance = round(pulse_duration * 17150, 2)
         if(distance < 300):
-            sensor_readings[index] = distance
-        time.sleep(0.00001)
-    printUltrasonics()
+        	sensor_readings[index] = distance
+		print distance
+		return distance
+           #printUltrasonics()
 
 time.sleep(2)
 def refresh_sensors():#function running in sepparate thread for cuntinuosly reading the ultrasonic sensors
 
     while 1:
-        event.wait()
         read_ultrasonics()
+#	print sensor_readings
+
 
     print "Ready reading"
     return 0.2
 
-
-
-def printUltrasonics():
-    event.clear()
-    for index in xrange(0, nr_ultrasonic_sensors):
-        print sensor_readings[index]
-    print"\n"
-    #if mappingDone()==False & WheelEncoder==1:
-    #    mapStep()
-    time.sleep(0.5)
-    event.set()
+def getUltrasonics():
+	global sensor_readings
+   	return sensor_readings
 
 def RunUltrasonics():
     print "Ultrasonic sensors starting..."
     setup_ultrasonics()
     print "Setup ready."
-    refresh_thread = Thread(target=refresh_sensors)#define separate thread for ultrasonic sensors read
-    refresh_thread.start()
+    #p = Thread(target=refresh_sensors)#define separate thread for ultrasonic sensors read
+    #p.start()

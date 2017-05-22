@@ -1,4 +1,5 @@
 import sys as _sys
+import math
 import os.path
 from DirectionControl import *
 from ThrottleControl import *
@@ -19,6 +20,30 @@ def readMapping():
     	for i in xrange(0,mapping.buffer_info()[1]):
 		print mapping[i]
 
+def getStraightLine(currentIndex):
+	counter=0
+	returnv=40
+	good=1
+	c5=0
+	for i in xrange(currentIndex,currentIndex+40):
+		if(abs(5-mapping[i])>1):
+			i=currenIndex+40
+			good=0
+		else:
+			if mapping[i]==5:
+				c5=c5+1
+	if good == 1:
+		if c5<30:
+			good=0
+	if good == 1:
+		
+		currentIndex=currentIndex+40
+		while mapping[currentIndex]==5:
+			currentIndex=currentIndex+1
+			returnv=returnv+1
+		return returnv	
+		
+
 def mappingNeeded():
 	return os.path.isfile('mapping.txt')
 
@@ -31,5 +56,5 @@ def mappingDone():
    	f.close()
 
 def mapStep(ta):
-   	print 'map step :::::::::::::::::::',ta
+   	#print 'map step :::::::::::::::::::',ta
    	mapping.append(float(ta))

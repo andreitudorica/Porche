@@ -3,9 +3,9 @@ import time as time
 last_position = 0
 center_sensor=5
 nr_sensors=9
-Kp=300
+Kp=100
 Ki=1
-Kd=100#changed from 2
+Kd=200#changed from 2
 lerror=0 #last error
 prevtime=time.time() 
 def calculate_error(position):
@@ -52,8 +52,6 @@ def correction(raw_position):
     global last_position
     dt=currtime-prevtime
     position=current_position(raw_position)
-    if position != last_position:
-        print "position: ", position
     error=calculate_error(position)
     if dt > 0:
         motor_direction=Kp*error+Kd*(error-lerror) / dt 
