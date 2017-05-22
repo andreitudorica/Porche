@@ -29,19 +29,23 @@ def read_ultrasonics(index):
         GPIO.output(trig[index], True)
         time.sleep(0.00001)
         GPIO.output(trig[index], False)
-
-        while GPIO.input(echo[index]) == 0:
-            pulse_start = time.time()
-        while GPIO.input(echo[index]) == 1:
+	prevtime=time.time()
+        while GPIO.input(echo[index]) == 0 :
+		if time.time()-prevtime>0.0029154:
+			pulse_start=0
+			break
+            	pulse_start = time.time()
+        while GPIO.input(echo[index]) == 1 and pulse_start!=0:
             pass
 
         pulse_end = time.time()
         pulse_duration = pulse_end - pulse_start
         distance = round(pulse_duration * 17150, 2)
-        if(distance < 300):
+        if(pulse_start!=0 and distance < 300):
         	sensor_readings[index] = distance
 		print distance
 		return distance
+	return 0
            #printUltrasonics()
 
 time.sleep(2)

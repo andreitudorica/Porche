@@ -51,7 +51,7 @@ basicThrottle = 40          #the basic level of throttle
 simulationLength = 420      #number of seconds the code runs
 numberOfStepsToAverage = 1 #the number of steps that are recorded to compute the change in throttle
 minimalDiff = 0.005        #the minimal trusted difference between 2 encoder steps 
-DesiredGap = 0.06          #the desired gap between 2 steps
+DesiredGap = 0.04          #the desired gap between 2 steps
 
 
 
@@ -72,6 +72,9 @@ SpeedSetMin=-20
 SpeedSetMax=20
 setCenterSensor(5)
 RunUltrasonics()
+while 1==1:
+	setTurning(1)
+	setThrottle(80)
 #while 1==1:
 #	time.sleep(0.3)
 #	ultrasonics=[0,0,0]
@@ -92,26 +95,34 @@ lastTurningAmount=0
 ultrasonics=[0,0,0]
 step=0
 while time.time()<t+simulationLength:
-#	if getButton()==0:
-#		break
-#	print "Steeeeep ",step
-#	print "Time interval for sensors ",time.time()-lastUltrasonicRead
-#	if time.time()-lastUltrasonicRead>0.03:
-##		ultrasonics[step]=read_ultrasonics(step)
-#		step=step+1
-#		print "Steeeeep ",step
+	if getButton()==0:
+		break
+	#print "Steeeeep ",step
+	#print "Time interval for sensors ",time.time()-lastUltrasonicRead
+	if time.time()-lastUltrasonicRead>0.03:
+		ultrasonics[step]=read_ultrasonics(step)
+		step=step+1
+		print "Steeeeep ",step
 		#0-right 1-middle 2-left
-#		if step==3:
-#			step=0
-#			if ultrasonics[0]!=None and ultrasonics[1]!=None and ultrasonics[2]!=None:
-#				print ultrasonics
-#				if ultrasonics[0] < 30 and ultrasonics[1] < 30 and engage == False: #object in middle-right side
-#					print 'ENGAGE'
-#					engage=True
-#					engageTurns=8
-#					sensor=dischargeRight
-#					decidedEngage=engageLeft
-#		lastUltrasonicRead=time.time()
+		if step==3:
+			step=0
+			if ultrasonics[0]!=0 and ultrasonics[1]!=0 and ultrasonics[2]!=0:
+				print ultrasonics
+				if ultrasonics[0] < 50 and ultrasonics[1] < 50 and engage == False: #object in middle-right side
+					print 'ENGAGE'
+					engage=True
+					engageTurns=10
+					sensor=dischargeRight
+					decidedEngage=engageLeft
+				else:
+					if ultrasonics[0]<30 and engage == False:
+						print "ENGAGE"
+						engage=True
+                                        	engageTurns=4
+                                        	sensor=dischargeRight
+                                        	decidedEngage=engageLeft
+
+		lastUltrasonicRead=time.time()
 #	if finishDetected()==1 and mappingOn==True:
 #		mappingOn=False
 #		mappingDone()
@@ -134,16 +145,16 @@ while time.time()<t+simulationLength:
 			speedSet += SpeedSetIncrease #speed up
 			if speedSet > SpeedSetMax:						
 				speedSet = SpeedSetMax
-		print "MPG: " , Gap , "SpeedSet: " , speedSet
+		#print "MPG: " , Gap , "SpeedSet: " , speedSet
 		LastMPG=CurrMPG
 #		if mappingOn==True:
                         #print 'maaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaap'
  #                       mapStep(lastTurningAmount)
 #		else:
 #			currentIndex=currentIndex+1
-	#lateralSensor=getLateralSensors()
-	lateralSensor=0
-	if engage==False and lateralSensor==0:#normal case
+	lateralSensor=getLateralSensors()
+	#lateralSensor=0
+	if engage==False and lateralSensor==0 and 1==0:#normal case
 		#print "NORMAL CASE"
 		sensorBuffer=getTriggeredSensor() # get the triggered front sensor in a buffer
  		#print "Position of last sensorBuffer---------",sensorBuffer,time.time()
@@ -155,22 +166,24 @@ while time.time()<t+simulationLength:
 	    	setTurning(ComputedCorrection) # set turning acording to the front sensors
 		lastTurningAmount=ComputedCorrection
 	else:
-		#if lateralSensor==0:#in collision avoidance state
+		if lateralSensor==0:#in collision avoidance state
 			if(engageTurns>0):#if in engage state
 #				print engageTurns
 				setTurning(decidedEngage)# engage
 				lastTurningAmount=decidedEngage
 			else:
-				engage=False
-				setEngageTimer=False	
-				print "Finalizare depasire, hihi finalizare :>"
-		#else:
-			#if lateralSensor==2 or lateralSensor==1:
-			#	setTurning(1)
-			#	print "LEEEEEEEEEEEFT"
-			#if lateralSensor==3 or lateralSensor==4:
-			#	setTurning(-1)
-			#	print "RIGHTTTTTTTTTT"
+				if engage==True:
+					engage=False
+					setEngageTimer=False
+					setTurning(1)	
+					print "Finalizare depasire, hihi finalizare :>"
+		else:
+			if lateralSensor==2 or lateralSensor==1:
+				setTurning(1)
+				#print "LEEEEEEEEEEEFT"
+			if lateralSensor==3 or lateralSensor==4:
+				setTurning(-1)
+				#print "RIGHTTTTTTTTTT"
 
     	if engage==True:
         	speedSet=-4
