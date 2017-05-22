@@ -72,9 +72,6 @@ SpeedSetMin=-20
 SpeedSetMax=20
 setCenterSensor(5)
 RunUltrasonics()
-while 1==1:
-	setTurning(1)
-	setThrottle(80)
 #while 1==1:
 #	time.sleep(0.3)
 #	ultrasonics=[0,0,0]
@@ -154,7 +151,7 @@ while time.time()<t+simulationLength:
 #			currentIndex=currentIndex+1
 	lateralSensor=getLateralSensors()
 	#lateralSensor=0
-	if engage==False and lateralSensor==0 and 1==0:#normal case
+	if engage==False and lateralSensor==0:#normal case
 		#print "NORMAL CASE"
 		sensorBuffer=getTriggeredSensor() # get the triggered front sensor in a buffer
  		#print "Position of last sensorBuffer---------",sensorBuffer,time.time()
